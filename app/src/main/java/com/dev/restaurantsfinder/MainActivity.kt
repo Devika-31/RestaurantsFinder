@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setContentView(R.layout.activity_main)
-        //chucker
+        //chucker, for tracking network calls easily
         askNotificationPermission()
       setUpBottomNav()
 
@@ -47,6 +47,8 @@ class MainActivity : AppCompatActivity() {
                             .commit()
                         true
                     }
+
+                    //for a now commented
 
 //                    R.id.all_restaurants -> {
 //                        supportFragmentManager.beginTransaction()

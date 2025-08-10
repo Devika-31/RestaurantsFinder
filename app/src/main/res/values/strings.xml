@@ -9,5 +9,6 @@
     <string name="home">Home</string>
     <string name="all_restaurants">All Restaurants</string>
     <string name="profile">Profile</string>
+    <string name="please_give_location_permission_to_continue">Please Give Location Permission To Continue</string>
 
 </resources>

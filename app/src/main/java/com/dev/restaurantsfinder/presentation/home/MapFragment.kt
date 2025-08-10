@@ -3,7 +3,6 @@ package com.innov.hrms.presentation.home
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -16,34 +15,30 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.SeekBar
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.annotation.RequiresPermission
-import androidx.appcompat.app.AppCompatActivity.RESULT_OK
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dev.restaurantsfinder.R
+import com.dev.restaurantsfinder.base.BaseFragment
 import com.dev.restaurantsfinder.databinding.HomeFragmentBinding
 import com.dev.restaurantsfinder.domain.model.restaurants.GetRestaurantRequestModel
 import com.dev.restaurantsfinder.domain.model.restaurants.RestaurantDataModel
+import com.dev.restaurantsfinder.domain.viewmodel.user.RestaurantsViewModel
 import com.dev.restaurantsfinder.presentation.restaurants.adapter.RestaurantAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.dev.restaurantsfinder.base.BaseFragment
-import com.dev.restaurantsfinder.domain.viewmodel.user.RestaurantsViewModel
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -55,6 +50,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
     private var selectedRadius = 500
     private var _binding: HomeFragmentBinding? = null
     private val binding get() = _binding!!
+
     private var updatedLat: Double = 0.0
     private var updatedLong: Double = 0.0
 
@@ -75,10 +71,15 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
             if (isGranted) {
                 checkLocationPermissionAndFetch()
             } else {
+                showToast(message = getString(R.string.please_give_location_permission_to_continue))
             }
         }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = HomeFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -86,9 +87,11 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
 
-        val mapFragment = childFragmentManager.findFragmentById(binding.mapFragment.id) as? SupportMapFragment
+        val mapFragment =
+            childFragmentManager.findFragmentById(binding.mapFragment.id) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
 
         setUpObserver()
@@ -104,7 +107,10 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun checkLocationPermissionAndFetch() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
             == PackageManager.PERMISSION_GRANTED
         ) {
             googleMap?.isMyLocationEnabled = true
@@ -130,7 +136,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
 
                     val currentLatLng = LatLng(updatedLat, updatedLong)
                     googleMap?.clear()
-                    googleMap?.addMarker(MarkerOptions().position(currentLatLng).title("You are here"))
+                    googleMap?.addMarker(
+                        MarkerOptions().position(currentLatLng).title("You are here")
+                    )
                     googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
 
                     callFetchRestApi()
@@ -141,15 +149,15 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
         )
     }
 
-    private fun setZoomMap(latLng: LatLng, zoomLevel: Float = 15f) {
-        val cameraPosition = CameraPosition.Builder()
-            .target(latLng)
-            .zoom(zoomLevel)
-            .bearing(0f)
-            .tilt(30f)
-            .build()
-        googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-    }
+//    private fun setZoomMap(latLng: LatLng, zoomLevel: Float = 15f) {
+//        val cameraPosition = CameraPosition.Builder()
+//            .target(latLng)
+//            .zoom(zoomLevel)
+//            .bearing(0f)
+//            .tilt(30f)
+//            .build()
+//        googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+//    }
 
     private fun setUpObserver() {
         binding.apply {
@@ -205,6 +213,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
 
     private fun setUpListeners() {
         binding.apply {
+            //pagination
             rvRestaurants.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(rv, dx, dy)
@@ -220,13 +229,19 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
                     }
                 }
             })
+            //pull to refresh ,resetting it to new york location by default
             swipeRefresh.setOnRefreshListener {
                 swipeRefresh.isRefreshing = false
                 isResetApi = true
                 callFetchRestApi()
             }
             seekRadius.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                @SuppressLint("DefaultLocale")
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
                     selectedRadius = if (progress < 500) 500 else progress
                     val radiusText = if (selectedRadius >= 1000) {
                         String.format("Radius: %.1f km", selectedRadius / 1000.0)
@@ -235,6 +250,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
                     }
                     tvRadiusValue.text = radiusText
                 }
+
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                     offset = 0
@@ -260,7 +276,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, RestaurantAdapter.OnItem
     }
 
     private fun Context.isNetworkAvailable(): Boolean {
-        val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             val networkInfo = connectivityManager.activeNetworkInfo
             return networkInfo != null && networkInfo.isConnected
