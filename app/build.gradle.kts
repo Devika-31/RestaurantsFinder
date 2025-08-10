@@ -50,8 +50,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //for responsiveness
     implementation(libs.laibrarySdpAndroid)
     implementation(libs.laibrarySspAndroid)
+
     // Map
     implementation(libs.play.services.maps)
     implementation(libs.view)
@@ -62,6 +64,7 @@ dependencies {
     //Koin
     implementation(libs.insert.koin.koin.core)
     implementation(libs.insert.koin.koin.android)
+
     //REST - APIServices
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
