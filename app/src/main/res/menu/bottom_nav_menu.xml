@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="@string/home" />
+
+<!--    <item-->
+<!--        android:id="@+id/all_restaurants"-->
+<!--        android:icon="@drawable/ic_launcher_background"-->
+<!--        android:title="@string/all_restaurants" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/nav_profile"-->
+<!--        android:icon="@drawable/ic_launcher_background"-->
+<!--        android:title="@string/profile" />-->
+</menu>

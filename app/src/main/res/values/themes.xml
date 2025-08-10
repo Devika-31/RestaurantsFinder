@@ -1,0 +1,23 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/cornflower_blue</item>
+        <!--        to disable the dark mode effect-->
+        <item name="android:statusBarColor">@color/cornflower_blue</item>
+        <item name="colorAccent">@color/cornflower_blue</item>
+        <!-- Set status bar icons to white -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <!--        <item name="bottomSheetDialogTheme">@drawable/bg_bottom_sheet</item>-->
+
+    </style>
+
+    <style name="Base.Theme.RestaurantsFinder." parent="Base.Theme" />
+
+    <!--    For transparent effect-->
+
+</resources>

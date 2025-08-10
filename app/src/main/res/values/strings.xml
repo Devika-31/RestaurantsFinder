@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">RestaurantsFinder</string>
+    <string name="insufficient_data">Insufficient Data</string>
+    <string name="there_is_not_enough_data_check_your_connection_or_try_again">There is not enough data, Check your connection or try again</string>
+    <string name="notification_permission">Notification Permission</string>
+    <string name="please_enable_notifications_from_the_app_settings">Please Enable Notifications From The App Settings.</string>
+    <string name="data_not_found">Data Not Found\n</string>
+    <string name="no_internet_connection_found_check_your_connection_or_try_again">No internet connection found. Check your connection or try again</string>
+    <string name="home">Home</string>
+    <string name="all_restaurants">All Restaurants</string>
+    <string name="profile">Profile</string>
+
+</resources>
