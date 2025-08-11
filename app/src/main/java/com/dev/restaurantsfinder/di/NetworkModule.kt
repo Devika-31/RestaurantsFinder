@@ -35,11 +35,14 @@ val NetworkModule = module {
             val request = chain.request().newBuilder()
                 .addHeader(
                     "Authorization",
-                    "Bearer XPFgzKwZGK1yqRxHi0d5xsARFOLpXIvccQj5jekqTnysweGyoIfVUHcH2tPfGq5Oc9kwKHPkcOjk2d1Xobn7aTjOFeop8x41IUfVvg2Y27KiINjYPADcE7Qza0RkX3Yx"
+                    "Bearer  ${BuildConfig.API_KEY}"
                 )
                 .build()
             chain.proceed(request)
         }
+
+        //sync or to easy put api key here directly after Bearer
+
 
         OkHttpClient.Builder()
             .addInterceptor(authInterceptor) // Custom token interceptor
