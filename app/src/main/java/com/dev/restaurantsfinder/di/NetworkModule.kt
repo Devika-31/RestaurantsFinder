@@ -41,7 +41,7 @@ val NetworkModule = module {
             chain.proceed(request)
         }
 
-        //sync or to easy put api key here directly after Bearer
+        //sync or to easy put api key here directly after Bearer for test
 
 
         OkHttpClient.Builder()
